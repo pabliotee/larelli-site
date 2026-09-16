@@ -497,5 +497,5 @@ section { padding: 80px 0; }
   .nav.open { transform: translateY(0); }
   .nav-toggle { display: block; }
   .diferenciais { grid-template-columns: 1fr; }
-  .grid-produtos { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-produtos { grid-template-columns: 1fr; gap: 20px; }
 }
