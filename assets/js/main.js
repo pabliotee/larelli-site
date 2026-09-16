@@ -119,14 +119,12 @@ function initLightbox() {
     document.body.style.overflow = 'hidden';
   }
 
-  function openImageOnly(src) {
-    currentImages = [src];
-    currentIndex = 0;
+  function openImageOnly(images, startIndex) {
+    currentImages = images;
+    currentIndex = startIndex;
     infoWrap.hidden = true;
     thumbsWrap.hidden = true;
-    prevBtn.hidden = true;
-    nextBtn.hidden = true;
-    mainImg.src = src;
+    showImage(currentIndex);
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -154,8 +152,10 @@ function initLightbox() {
     if (photo) photo.addEventListener('click', () => openFromCard(card));
   });
 
-  document.querySelectorAll('.instagram-photo').forEach(el => {
-    el.addEventListener('click', () => openImageOnly(el.dataset.foto));
+  const igPhotoEls = document.querySelectorAll('.instagram-photo');
+  const igSrcs = [...igPhotoEls].map(el => el.dataset.foto);
+  igPhotoEls.forEach((el, i) => {
+    el.addEventListener('click', () => openImageOnly(igSrcs, i));
   });
 
   function close() {
