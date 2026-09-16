@@ -92,6 +92,7 @@ function initLightbox() {
 
   const mainImg = lightbox.querySelector('.lightbox-main img');
   const thumbsWrap = lightbox.querySelector('.lightbox-thumbs');
+  const infoWrap = lightbox.querySelector('.lightbox-info');
   const titleEl = lightbox.querySelector('.lightbox-info h3');
   const precoEl = lightbox.querySelector('.lightbox-info .preco');
   const whatsBtn = lightbox.querySelector('.lightbox-info .btn');
@@ -105,11 +106,27 @@ function initLightbox() {
   function openFromCard(card) {
     currentImages = getFotosCard(card);
     currentIndex = 0;
+    infoWrap.hidden = false;
+    thumbsWrap.hidden = false;
+    prevBtn.hidden = false;
+    nextBtn.hidden = false;
     titleEl.textContent = getNomeCompleto(card);
     precoEl.textContent = card.dataset.preco;
     whatsBtn.href = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Olá! Tenho interesse no produto: ' + getNomeCompleto(card) + '. Ele ainda está disponível?')}`;
     renderThumbs();
     showImage(0);
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function openImageOnly(src) {
+    currentImages = [src];
+    currentIndex = 0;
+    infoWrap.hidden = true;
+    thumbsWrap.hidden = true;
+    prevBtn.hidden = true;
+    nextBtn.hidden = true;
+    mainImg.src = src;
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -135,6 +152,10 @@ function initLightbox() {
   document.querySelectorAll('.produto-card').forEach(card => {
     const photo = card.querySelector('.produto-photo');
     if (photo) photo.addEventListener('click', () => openFromCard(card));
+  });
+
+  document.querySelectorAll('.instagram-photo').forEach(el => {
+    el.addEventListener('click', () => openImageOnly(el.dataset.foto));
   });
 
   function close() {
