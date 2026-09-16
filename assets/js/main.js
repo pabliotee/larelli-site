@@ -3,8 +3,61 @@
 document.addEventListener('DOMContentLoaded', () => {
   initMobileNav();
   initFiltros();
+  initVariantes();
   initLightbox();
+  document.querySelectorAll('.btn-wa-produto').forEach(btn => updateWhatsappHref(btn.closest('.produto-card')));
 });
+
+function initVariantes() {
+  document.querySelectorAll('.produto-card[data-variantes]').forEach(card => {
+    const variantes = JSON.parse(card.dataset.variantes);
+    card.dataset.varianteAtiva = '0';
+    const wrap = card.querySelector('.variantes');
+    if (!wrap) return;
+
+    variantes.forEach((v, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'variante-swatch' + (i === 0 ? ' active' : '');
+      btn.style.background = v.cor;
+      btn.title = v.nome;
+      btn.setAttribute('aria-label', v.nome);
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        card.dataset.varianteAtiva = String(i);
+        wrap.querySelectorAll('.variante-swatch').forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        card.querySelector('.produto-photo img').src = v.fotos[0];
+        updateWhatsappHref(card);
+      });
+      wrap.appendChild(btn);
+    });
+  });
+}
+
+function getNomeCompleto(card) {
+  if (card.dataset.variantes) {
+    const variantes = JSON.parse(card.dataset.variantes);
+    const idx = parseInt(card.dataset.varianteAtiva || '0', 10);
+    return `${card.dataset.nome} - cor ${variantes[idx].nome}`;
+  }
+  return card.dataset.nome;
+}
+
+function getFotosCard(card) {
+  if (card.dataset.variantes) {
+    const variantes = JSON.parse(card.dataset.variantes);
+    const idx = parseInt(card.dataset.varianteAtiva || '0', 10);
+    return variantes[idx].fotos;
+  }
+  return JSON.parse(card.dataset.fotos);
+}
+
+function updateWhatsappHref(card) {
+  const btn = card.querySelector('.btn-wa-produto');
+  if (!btn) return;
+  btn.href = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Olá! Tenho interesse no produto: ' + getNomeCompleto(card) + '. Ele ainda está disponível?')}`;
+}
 
 function initMobileNav() {
   const toggle = document.querySelector('.nav-toggle');
@@ -50,11 +103,11 @@ function initLightbox() {
   let currentIndex = 0;
 
   function openFromCard(card) {
-    currentImages = JSON.parse(card.dataset.fotos);
+    currentImages = getFotosCard(card);
     currentIndex = 0;
-    titleEl.textContent = card.dataset.nome;
+    titleEl.textContent = getNomeCompleto(card);
     precoEl.textContent = card.dataset.preco;
-    whatsBtn.href = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Olá! Tenho interesse no produto: ' + card.dataset.nome + '. Ele ainda está disponível?')}`;
+    whatsBtn.href = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent('Olá! Tenho interesse no produto: ' + getNomeCompleto(card) + '. Ele ainda está disponível?')}`;
     renderThumbs();
     showImage(0);
     lightbox.classList.add('open');
