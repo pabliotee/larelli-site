@@ -346,22 +346,23 @@ section { padding: 80px 0; }
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 16px;
 }
 .lightbox.open { display: flex; }
 
 .lightbox-content {
   position: relative;
   max-width: 720px;
-  max-height: 92vh;
+  max-height: 96vh;
   width: 100%;
   background: var(--bg);
-  padding: 24px;
+  padding: 16px;
   overflow-y: auto;
 }
 
 .lightbox-main {
-  height: min(55vh, 520px);
+  position: relative;
+  height: min(50vh, 520px);
   overflow: hidden;
   background: var(--bg-alt);
   margin-bottom: 14px;
@@ -370,7 +371,7 @@ section { padding: 80px 0; }
 
 .lightbox-thumbs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
 .lightbox-thumbs img {
-  width: 64px; height: 80px; object-fit: cover;
+  width: 56px; height: 70px; object-fit: cover;
   cursor: pointer;
   opacity: 0.55;
   border: 1px solid transparent;
@@ -384,28 +385,45 @@ section { padding: 80px 0; }
 
 .lightbox-close {
   position: absolute;
-  top: -44px; right: 0;
-  background: none;
+  top: 10px; right: 10px;
+  z-index: 10;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(26, 26, 26, 0.55);
+  border-radius: 50%;
   border: none;
   color: var(--white);
   cursor: pointer;
-  padding: 6px;
+  padding: 0;
+  transition: background 0.2s ease;
 }
-.lightbox-close svg { width: 26px; height: 26px; }
+.lightbox-close:hover { background: rgba(26, 26, 26, 0.85); }
+.lightbox-close svg { width: 18px; height: 18px; }
 
 .lightbox-nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 10;
   background: rgba(255,255,255,0.85);
   border: none;
-  width: 40px; height: 40px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s ease;
 }
-.lightbox-nav svg { width: 20px; height: 20px; color: var(--accent-dark); }
-.lightbox-prev { left: -20px; }
-.lightbox-next { right: -20px; }
+.lightbox-nav:hover { background: rgba(255,255,255,1); }
+.lightbox-nav svg { width: 18px; height: 18px; color: var(--accent-dark); }
+.lightbox-prev { left: 10px; }
+.lightbox-next { right: 10px; }
+
+@media (max-width: 480px) {
+  .lightbox { padding: 8px; }
+  .lightbox-content { padding: 10px; max-height: 98vh; }
+  .lightbox-main { height: 42vh; }
+  .lightbox-thumbs img { width: 46px; height: 58px; }
+}
 
 /* ---------- Floating WhatsApp button ---------- */
 .whatsapp-float {
@@ -475,5 +493,4 @@ section { padding: 80px 0; }
   .nav-toggle { display: block; }
   .diferenciais { grid-template-columns: 1fr; }
   .grid-produtos { grid-template-columns: 1fr 1fr; gap: 16px; }
-  .lightbox-nav { display: none; }
 }
